@@ -24,6 +24,16 @@ ctrl+shift+p, WSL:Connect to WSL
 [http://localhost:3000](http://localhost:3000) 에 서페이지 실행됨
 
 
+# 트러블 슈팅
+## UNC 경로 문제
+nvm lts 최신 버전으로 재설치
+```curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+source ~/.bashrc
+
+nvm install --lts```
+
+
 # React App 소개 및 실행 메뉴얼
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
