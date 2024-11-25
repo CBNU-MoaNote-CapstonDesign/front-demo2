@@ -11,8 +11,8 @@ ctrl+shift+p, WSL:Connect to WSL
 
 # 깃 레포 연결
 ## 1. 클론
-```git clone https://github.com/CBNU-MoaNote-CapstonDesign/front_demo2.git```
-```cd front_demo2```
+```git clone https://github.com/CBNU-MoaNote-CapstonDesign/front-demo2.git```
+```cd front-demo2```
 
 
 ## 2. 의존 패키지 설치
