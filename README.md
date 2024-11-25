@@ -27,6 +27,9 @@ ctrl+shift+p, WSL:Connect to WSL
 # 트러블 슈팅
 ## UNC 경로 문제
 nvm lts 최신 버전으로 재설치
+
+https://stackoverflow.com/questions/74000168/running-an-express-server-from-wsl-unc-paths-are-not-supported
+
 ```curl https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
 source ~/.bashrc
