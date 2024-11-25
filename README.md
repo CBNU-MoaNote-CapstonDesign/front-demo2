@@ -1,4 +1,30 @@
-# Getting Started with Create React App
+# vscode에서 세팅
+## WSL과 연결
+ctrl+shift+p, WSL:Connect to WSL
+
+## WSL에서 필요 패키지 설치
+```sudo apt update```
+```sudo apt install git -y```
+```sudo apt install nodejs npm -y```
+```sudo apt install build-essential -y```
+
+
+# 깃 레포 연결
+## 1. 클론
+```git clone https://github.com/CBNU-MoaNote-CapstonDesign/front_demo2.git```
+```cd front_demo2```
+
+
+## 2. 의존 패키지 설치
+`npm install`
+
+## 3. 실행
+`npm start`
+
+[http://localhost:3000](http://localhost:3000) 에 서페이지 실행됨
+
+
+# React App 소개 및 실행 메뉴얼
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
