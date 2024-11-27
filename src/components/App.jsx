@@ -3,6 +3,63 @@ import { useState, useRef } from 'react'
 import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+
+function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick}) {
+  return (
+    <nav
+      className="navbar navbar-expand-lg"
+      style={{
+        backgroundColor: "#9B2C5D", // 배경색 지정 (이미지의 주요 색상)
+        color: "white",
+      }}
+    >
+      <div className="container-fluid">
+        {/* 왼쪽 로고 및 텍스트 */}
+        <a className="navbar-brand text-white" href="#" style={{ fontWeight: "bold" }}>
+          {
+            /*
+              <img
+              src="https://via.placeholder.com/40" // 로고 이미지 (예제 URL)
+              alt="logo"
+              style={{ marginRight: "10px", borderRadius: "50%" }}
+              />
+            */
+          }
+          MOANOTE
+        </a>
+
+        {/* 오른쪽 버튼 */}
+        <div className="d-flex">
+        <button
+            className="btn btn-light me-2"
+            style={{ backgroundColor: "#355395", color: "white" }}
+            type="button"
+            onClick={handlePrintButtonClick}
+          >
+            전체 내용 출력
+          </button>
+          <button
+            className="btn btn-light me-2"
+            style={{ backgroundColor: "#355395", color: "white" }}
+            type="button"
+            onClick={handleAddTextBlock}
+          >
+            텍스트 블록 추가
+          </button>
+          <button
+            className="btn btn-light"
+            style={{ backgroundColor: "#355395", color: "white" }}
+            type="button"
+            onClick={handleAddGraphBlock}
+          >
+            그래프 블록 추가
+          </button>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
 function TextBlock({id, initialContents, hookContentsUpdate}) {
   const [contents, setContents] = useState(initialContents);
   const textareaRef = useRef(null);
