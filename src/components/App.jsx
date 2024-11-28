@@ -94,43 +94,23 @@ function TextBlock({id, initialContents, hookContentsUpdate}) {
   )
 }
 
-//https://docs.excalidraw.com/docs/@excalidraw/excalidraw/api/props/excalidraw-api#getfiles
-function GraphBlock({ id, jsonBody }) {
+function GraphBlock({ id, initialContents, hookContentsUpdate }) {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
+  const [contents, setContents] = useState(initialContents); // JSON 콘텐츠
 
+  function createScene(elements, state) {
+    return ({
+      elements: elements,
+      appState: state
+    });
+  }
 
-  // @TODO 테스트용 함수, 나중에 삭제 될 예정
-  const initializeGlobalFunctions = (api) => {
-    if (!api) return;
-
-    // Excalidraw 상태를 JSON으로 변환하는 전역 함수
-    window.serializeExcalidraw = () => {
-      console.log(api)
-      let elements = api.getSceneElements();
-      let appState = api.getAppState();
-
-      let sceneData = {
-        elements : api.getSceneElements(),
-        appState: appState
-      }
-
-      api.updateScene(sceneData); 
-      //console.log(json); //Redacted Function
-    };
-
-    // JSON 데이터를 Excalidraw에 로드하는 전역 함수
-    window.loadExcalidraw = (jsonString) => {
-      try {
-        const parsedData = JSON.parse(jsonString);
-        api.updateScene(parsedData);
-        console.log("Loaded JSON into Excalidraw:", parsedData);
-      } catch (error) {
-        console.error("Failed to parse JSON string:", error);
-      }
-    };
-
-    console.log("Excalidraw global functions initialized.");
-  };
+  function handleContentsUpdate(excalidrawElements, appState, files) {
+    const scene = createScene(excalidrawElements, appState);
+    const contents = JSON.stringify(scene);
+    setContents(contents);
+    hookContentsUpdate(id, contents);
+  }
 
   return (
     <>
@@ -138,9 +118,13 @@ function GraphBlock({ id, jsonBody }) {
         <Excalidraw excalidrawAPI={
           (api) => {
             setExcalidrawAPI(api);
-            initializeGlobalFunctions(api);
+            try {
+              let scene = JSON.parse(contents);
+              api.updateScene(scene);
+            } catch (e) { }
           }
-        } />
+        } onChange={handleContentsUpdate}
+        />
       </div>
     </>
   )
@@ -197,8 +181,8 @@ function Editor() {
       {
         docBlocks.map((docBlock) => 
           docBlock.isTextBlock ? 
-          <TextBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate = {updateContents}/>
-          : <GraphBlock id={docBlock.id} />
+            <TextBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate={updateContents} />
+            : <GraphBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate={updateContents} />
         )
       }
     </>
