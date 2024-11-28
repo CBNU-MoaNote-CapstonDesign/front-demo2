@@ -11,3 +11,42 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.doc-block {
+  overflow: hidden;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  width: 70%; /* 화면의 70%를 차지 */
+}
+
+.content-box {
+  width: 100%;
+  min-height: 100px; /* 최소 높이 설정 */
+  border: 1px solid #ccc; /* 기본 테두리 */
+  outline: none; /* 기본 아웃라인 제거 */
+  resize: none; /* 사용자가 수동으로 크기 조정 불가 */
+  overflow: hidden; /* 스크롤 바 숨기기 */
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+  transition: outline 0.3s ease;
+}
+
+.content-box:hover, .content-box:focus {  
+  border:2px #FE6B8B
+}
+
+.content-box-button {
+  float: left;
+  height: 30px;  
+  background-color: white; /* 기본 배경색 */
+  color: gray; /* 기본 글자색 */
+  border: 1px solid gray; /* 회색 테두리 */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.content-box-button:hover {
+  background-color: #FE6B8B; /* 호버 시 배경색 */
+  color: white; /* 호버 시 글자색 */
+}
