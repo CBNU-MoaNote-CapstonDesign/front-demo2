@@ -1,7 +1,7 @@
 import React from "react";
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
-import "bootstrap/dist/css/bootstrap.min.css";
+import Markdown from 'react-markdown'
 
 
 function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick}) {
@@ -62,15 +62,15 @@ function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick
 
 function TextBlock({id, initialContents, hookContentsUpdate}) {
   const [contents, setContents] = useState(initialContents);
+  const [isEditible, setIsEditible] = useState(true);
   const textareaRef = useRef(null);
 
-  const handleInput = (event) => {
+  const adjustHeight = (event) => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto";  // CSS 높이를 초기화
       textarea.style.height = `${textarea.scrollHeight}px`;  // 컨텐츠 높이에 맞게 조정
     }
-    setContents(event.target.value);  // 상태 업데이트
   };
 
 
@@ -79,18 +79,38 @@ function TextBlock({id, initialContents, hookContentsUpdate}) {
     hookContentsUpdate(id, e.target.value);
   }
 
+  useEffect(() => {
+    if (isEditible) {
+      adjustHeight();
+    }
+  }, [isEditible, contents]);
+
   return (
-    <>
-      <textarea 
-        ref={textareaRef}
-        type="text"
-        className="form-control"
-        id={id} 
-        value={contents} 
-        onChange={handleContentsUpdate}
-        onInput={handleInput}
-      />
-    </>
+    <div className="doc-block">
+      <button
+        className="btn content-box-button editible"
+        onClick={() => {
+          setIsEditible(!isEditible);
+        }}
+      >
+        Change!
+      </button>
+      {
+        isEditible ?
+          <textarea
+            name="editible"
+            ref={textareaRef}
+            type="text"
+            className="content-box"
+            id={id}
+            value={contents}
+            onChange={handleContentsUpdate}
+          /> :
+          <Markdown className="content-box">
+            {contents}
+          </Markdown>
+      }
+    </div>
   )
 }
 
