@@ -130,9 +130,9 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
   }
 
   function handleContentsUpdate(excalidrawElements, appState, files) {
-    const rawText = serializeAsJSON(excalidrawElements, appState, files);
-    setContents(rawText);
-    hookContentsUpdate(id, rawText, false);
+    const documentRawText = serializeAsJSON(excalidrawElements, appState, files);
+    setContents(documentRawText);
+    hookContentsUpdate(id, documentRawText, false);
   }
 
   return (
@@ -162,6 +162,12 @@ function Editor() {
 
     localStorage.setItem("test", rawText);
   }
+
+  function pullFromDB() {
+    let rawText = localStorage.getItem("test");
+    importContents(rawText);
+  }
+
   function addTextBlock(contents) {
       let newDocBlocks = [...docBlocks];
       newDocBlocks.push(
