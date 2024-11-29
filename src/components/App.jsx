@@ -179,7 +179,6 @@ function Editor() {
       );
       docBlocksContents.push('');
     setDocBlocks(newDocBlocks);
-    console.log("Text Block 생성");
   }
 
   function addGraphBlock(contents) {
@@ -193,7 +192,6 @@ function Editor() {
       );
       docBlocksContents.push('');
       setDocBlocks(newDocBlocks);
-      console.log("Graph Block 생성");
   }
 
   function updateContents(idx, contents, isTextBlock) {
