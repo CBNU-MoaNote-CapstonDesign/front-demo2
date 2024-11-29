@@ -205,9 +205,9 @@ function Editor() {
   }
 
   function printContents() {
-    let allContents = '';
+    let allContents = {};
     for (let i in docBlocksContents) {
-      allContents += docBlocksContents[i];
+      allContents[i] = docBlocksContents[i];
     }
     console.log(allContents);
   }
