@@ -153,13 +153,13 @@ function Editor() {
 
   let docBlocksContents = [];
   
-  function addTextBlock() {
+  function addTextBlock(contents) {
       let newDocBlocks = [...docBlocks];
       newDocBlocks.push(
         {
-          isTextBlock : true,
-          id          : newDocBlocks.length,
-          initialContents        : '',
+        isTextBlock: true,
+        id: newDocBlocks.length,
+        initialContents: contents,
         }
       );
       docBlocksContents.push('');
@@ -167,13 +167,13 @@ function Editor() {
     console.log("Text Block 생성");
   }
 
-  function addGraphBlock() {
+  function addGraphBlock(contents) {
       let newDocBlocks = [...docBlocks];
       newDocBlocks.push(
         {
-          isTextBlock : false,
-          id          : newDocBlocks.length,
-          initialContents: '',
+        isTextBlock: false,
+        id: newDocBlocks.length,
+        initialContents: contents,
         }
       );
       docBlocksContents.push('');
@@ -199,7 +199,7 @@ function Editor() {
   
   return (
     <>
-      <Navbar handleAddTextBlock={addTextBlock} handleAddGraphBlock={addGraphBlock} handlePrintButtonClick={printContents} />
+      <Navbar handleAddTextBlock={() => { addTextBlock(''); }} handleAddGraphBlock={() => { addGraphBlock(''); }} handlePrintButtonClick={printContents} />
       {
         docBlocks.map((docBlock) => 
           docBlock.isTextBlock ? 
