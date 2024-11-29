@@ -119,14 +119,13 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const [contents, setContents] = useState(initialContents); // JSON 콘텐츠
 
-  function createScene(elements, state) {
-    return ({
-      elements: elements,
-      appState: state
-    });
+
+  
   }
 
   function handleContentsUpdate(excalidrawElements, appState, files) {
+    const rawText = serializeAsJSON(excalidrawElements, appState, files);
+    setContents(rawText);
     hookContentsUpdate(id, rawText, false);
   }
 
