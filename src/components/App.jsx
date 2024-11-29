@@ -205,6 +205,17 @@ function Editor() {
     }
     console.log(allContents);
   }
+
+  function importContents(documentRawText) {
+    let allContents = JSON.parse(documentRawText);
+    for (const [key, value] of Object.entries(allContents)) {
+      if (value.isTextBlock) {
+        addTextBlock(value.contents);
+      } else {
+        addGraphBlock(value.contents);
+      }
+    }
+  }
   
   return (
     <>
