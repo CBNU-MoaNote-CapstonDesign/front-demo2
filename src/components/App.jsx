@@ -4,7 +4,7 @@ import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
 import Markdown from 'react-markdown'
 
 
-function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick}) {
+function Navbar({ handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick }) {
   return (
     <nav
       className="navbar navbar-expand-lg"
@@ -31,7 +31,7 @@ function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick
 
         {/* 오른쪽 버튼 */}
         <div className="d-flex">
-        <button
+          <button
             className="btn btn-light me-2"
             style={{ backgroundColor: "#355395", color: "white" }}
             type="button"
@@ -61,7 +61,7 @@ function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick
   );
 }
 
-function TextBlock({id, initialContents, hookContentsUpdate}) {
+function TextBlock({ id, initialContents, hookContentsUpdate }) {
   const [contents, setContents] = useState(initialContents);
   const [isEditible, setIsEditible] = useState(true);
   const textareaRef = useRef(null);
@@ -120,7 +120,7 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
   const [contents, setContents] = useState(initialContents); // JSON 콘텐츠
 
 
-  
+
   function updateInitialContents() {
     if ((initialContents && initialContents !== '')) {
       return JSON.parse(initialContents);
@@ -152,7 +152,7 @@ function Editor() {
   let [docBlocks, setDocBlocks] = useState([]);
 
   let docBlocksContents = [];
-  
+
   function pushToDB() {
     let allContents = {};
     for (let i in docBlocksContents) {
@@ -169,29 +169,29 @@ function Editor() {
   }
 
   function addTextBlock(contents) {
-      let newDocBlocks = [...docBlocks];
-      newDocBlocks.push(
-        {
+    let newDocBlocks = [...docBlocks];
+    newDocBlocks.push(
+      {
         isTextBlock: true,
         id: newDocBlocks.length,
         initialContents: contents,
-        }
-      );
-      docBlocksContents.push('');
+      }
+    );
+    docBlocksContents.push('');
     setDocBlocks(newDocBlocks);
   }
 
   function addGraphBlock(contents) {
-      let newDocBlocks = [...docBlocks];
-      newDocBlocks.push(
-        {
+    let newDocBlocks = [...docBlocks];
+    newDocBlocks.push(
+      {
         isTextBlock: false,
         id: newDocBlocks.length,
         initialContents: contents,
-        }
-      );
-      docBlocksContents.push('');
-      setDocBlocks(newDocBlocks);
+      }
+    );
+    docBlocksContents.push('');
+    setDocBlocks(newDocBlocks);
   }
 
   function updateContents(idx, contents, isTextBlock) {
@@ -220,13 +220,13 @@ function Editor() {
       }
     }
   }
-  
+
   return (
     <>
       <Navbar handleAddTextBlock={() => { addTextBlock(''); }} handleAddGraphBlock={() => { addGraphBlock(''); }} handlePrintButtonClick={printContents} />
       {
-        docBlocks.map((docBlock) => 
-          docBlock.isTextBlock ? 
+        docBlocks.map((docBlock) =>
+          docBlock.isTextBlock ?
             <TextBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate={updateContents} />
             : <GraphBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate={updateContents} />
         )
