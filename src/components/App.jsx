@@ -11,9 +11,10 @@ function Navbar({handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick
       style={{
         backgroundColor: "#9B2C5D", // 배경색 지정 (이미지의 주요 색상)
         color: "white",
+        width: "100%"
       }}
     >
-      <div className="container-fluid">
+      <div className="container-fluid navbar">
         {/* 왼쪽 로고 및 텍스트 */}
         <a className="navbar-brand text-white" href="#" style={{ fontWeight: "bold" }}>
           {
