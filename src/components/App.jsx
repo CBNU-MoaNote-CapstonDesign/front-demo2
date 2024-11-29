@@ -153,6 +153,15 @@ function Editor() {
 
   let docBlocksContents = [];
   
+  function pushToDB() {
+    let allContents = {};
+    for (let i in docBlocksContents) {
+      allContents[i] = docBlocksContents[i];
+    }
+    let rawText = JSON.stringify(allContents);
+
+    localStorage.setItem("test", rawText);
+  }
   function addTextBlock(contents) {
       let newDocBlocks = [...docBlocks];
       newDocBlocks.push(
