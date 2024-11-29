@@ -4,7 +4,7 @@ import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw";
 import Markdown from 'react-markdown'
 
 
-function Navbar({ handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClick }) {
+function Navbar({ handleAddTextBlock, pushToDB, pullFromDB, handleAddGraphBlock, handlePrintButtonClick }) {
   return (
     <nav
       className="navbar navbar-expand-lg"
@@ -31,6 +31,22 @@ function Navbar({ handleAddTextBlock, handleAddGraphBlock, handlePrintButtonClic
 
         {/* 오른쪽 버튼 */}
         <div className="d-flex">
+          <button
+            className="btn btn-light"
+            style={{ backgroundColor: "#355395", color: "white" }}
+            type="button"
+            onClick={pushToDB}
+          >
+            DB에 저장
+          </button>
+          <button
+            className="btn btn-light"
+            style={{ backgroundColor: "#355395", color: "white" }}
+            type="button"
+            onClick={pullFromDB}
+          >
+            DB에서 불러오기
+          </button>
           <button
             className="btn btn-light me-2"
             style={{ backgroundColor: "#355395", color: "white" }}
@@ -223,7 +239,7 @@ function Editor() {
 
   return (
     <>
-      <Navbar handleAddTextBlock={() => { addTextBlock(''); }} handleAddGraphBlock={() => { addGraphBlock(''); }} handlePrintButtonClick={printContents} />
+      <Navbar handleAddTextBlock={() => { addTextBlock(''); }} handleAddGraphBlock={() => { addGraphBlock(''); }} handlePrintButtonClick={printContents} pushToDB={pushToDB} pullFromDB={pullFromDB}/>
       {
         docBlocks.map((docBlock) =>
           docBlock.isTextBlock ?
