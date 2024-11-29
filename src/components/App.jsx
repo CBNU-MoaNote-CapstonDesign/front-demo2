@@ -77,7 +77,7 @@ function TextBlock({id, initialContents, hookContentsUpdate}) {
 
   function handleContentsUpdate(e) {
     setContents(e.target.value);
-    hookContentsUpdate(id, e.target.value);
+    hookContentsUpdate(id, e.target.value, true);
   }
 
   useEffect(() => {
@@ -127,10 +127,7 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
   }
 
   function handleContentsUpdate(excalidrawElements, appState, files) {
-    const scene = createScene(excalidrawElements, appState);
-    const contents = JSON.stringify(scene);
-    setContents(contents);
-    hookContentsUpdate(id, contents);
+    hookContentsUpdate(id, rawText, false);
   }
 
   return (
@@ -184,8 +181,12 @@ function Editor() {
       console.log("Graph Block 생성");
   }
 
-  function updateContents(idx, contents) {
-    docBlocksContents[idx] = contents;
+  function updateContents(idx, contents, isTextBlock) {
+    docBlocksContents[idx] =
+    {
+      isTextBlock: isTextBlock,
+      contents: contents
+    };
   }
 
   function printContents() {
