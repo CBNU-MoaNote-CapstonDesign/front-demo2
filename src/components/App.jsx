@@ -121,6 +121,12 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
 
 
   
+  function updateInitialContents() {
+    if ((initialContents && initialContents !== '')) {
+      return JSON.parse(initialContents);
+    } else {
+      return null;
+    }
   }
 
   function handleContentsUpdate(excalidrawElements, appState, files) {
@@ -131,16 +137,11 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
 
   return (
     <>
-      <div id={id} style={{ width: "100vw", height: "100vh" }}>
-        <Excalidraw excalidrawAPI={
-          (api) => {
-            setExcalidrawAPI(api);
-            try {
-              let scene = JSON.parse(contents);
-              api.updateScene(scene);
-            } catch (e) { }
-          }
-        } onChange={handleContentsUpdate}
+      <div id={id} style={{ width: "70vw", height: "100vh" }}>
+        <Excalidraw
+          initialData={updateInitialContents()}
+          excalidrawAPI={(api) => setExcalidrawAPI(api)}
+          onChange={handleContentsUpdate}
         />
       </div>
     </>
