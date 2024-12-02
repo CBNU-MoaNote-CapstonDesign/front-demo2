@@ -108,7 +108,7 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
         className="btn content-box-button delete"
         onClick={() => removeBlock(id)}
       >
-        Delete
+        삭제
       </button>
 
       {/* 편집 버튼 */}
@@ -116,7 +116,7 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
         className="btn content-box-button editible"
         onClick={() => setIsEditible(!isEditible)}
       >
-        Change!
+        수정
       </button>
 
       {/* 내용 */}
