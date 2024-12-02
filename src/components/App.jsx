@@ -77,24 +77,23 @@ function Navbar({ handleAddTextBlock, pushToDB, pullFromDB, handleAddGraphBlock,
   );
 }
 
-function TextBlock({ id, initialContents, hookContentsUpdate }) {
+function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
   const [contents, setContents] = useState(initialContents);
   const [isEditible, setIsEditible] = useState(true);
   const textareaRef = useRef(null);
 
-  const adjustHeight = (event) => {
+  const adjustHeight = () => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = "auto";  // CSS 높이를 초기화
-      textarea.style.height = `${textarea.scrollHeight}px`;  // 컨텐츠 높이에 맞게 조정
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   };
 
-
-  function handleContentsUpdate(e) {
+  const handleContentsUpdate = (e) => {
     setContents(e.target.value);
     hookContentsUpdate(id, e.target.value, true);
-  }
+  };
 
   useEffect(() => {
     if (isEditible) {
@@ -104,31 +103,38 @@ function TextBlock({ id, initialContents, hookContentsUpdate }) {
 
   return (
     <div className="doc-block">
+      {/* 삭제 버튼 */}
+      <button
+        className="btn content-box-button delete"
+        onClick={() => removeBlock(id)}
+      >
+        Delete
+      </button>
+
+      {/* 편집 버튼 */}
       <button
         className="btn content-box-button editible"
-        onClick={() => {
-          setIsEditible(!isEditible);
-        }}
+        onClick={() => setIsEditible(!isEditible)}
       >
         Change!
       </button>
-      {
-        isEditible ?
-          <textarea
-            name="editible"
-            ref={textareaRef}
-            type="text"
-            className="content-box"
-            id={id}
-            value={contents}
-            onChange={handleContentsUpdate}
-          /> :
-          <Markdown className="content-box">
-            {contents}
-          </Markdown>
-      }
+
+      {/* 내용 */}
+      {isEditible ? (
+        <textarea
+          name="editible"
+          ref={textareaRef}
+          type="text"
+          className="content-box"
+          id={id}
+          value={contents}
+          onChange={handleContentsUpdate}
+        />
+      ) : (
+        <Markdown className="content-box">{contents}</Markdown>
+      )}
     </div>
-  )
+  );
 }
 
 function GraphBlock({ id, initialContents, hookContentsUpdate }) {
@@ -169,65 +175,62 @@ function Editor() {
 
   let docBlocksContents = [];
 
-  function pushToDB() {
-    let allContents = {};
-    for (let i in docBlocksContents) {
-      allContents[i] = docBlocksContents[i];
-    }
-    let rawText = JSON.stringify(allContents);
-
+  const pushToDB = () => {
+    const allContents = {};
+    docBlocksContents.forEach((content, index) => {
+      allContents[index] = content;
+    });
+    const rawText = JSON.stringify(allContents);
     localStorage.setItem("test", rawText);
-  }
+  };
 
-  function pullFromDB() {
-    let rawText = localStorage.getItem("test");
+  const pullFromDB = () => {
+    const rawText = localStorage.getItem("test");
     importContents(rawText);
-  }
+  };
 
-  function addTextBlock(contents) {
-    let newDocBlocks = [...docBlocks];
-    newDocBlocks.push(
-      {
-        isTextBlock: true,
-        id: newDocBlocks.length,
-        initialContents: contents,
-      }
-    );
+  const addTextBlock = (contents) => {
+    const newDocBlocks = [...docBlocks];
+    newDocBlocks.push({
+      isTextBlock: true,
+      id: newDocBlocks.length,
+      initialContents: contents,
+    });
     docBlocksContents.push('');
     setDocBlocks(newDocBlocks);
-  }
+  };
 
-  function addGraphBlock(contents) {
-    let newDocBlocks = [...docBlocks];
-    newDocBlocks.push(
-      {
-        isTextBlock: false,
-        id: newDocBlocks.length,
-        initialContents: contents,
-      }
-    );
+  const removeBlock = (id) => {
+    const updatedDocBlocks = docBlocks.filter((block) => block.id !== id);
+    setDocBlocks(updatedDocBlocks);
+    docBlocksContents.splice(id, 1); // 콘텐츠 목록에서 해당 블록 삭제
+  };
+
+  const addGraphBlock = (contents) => {
+    const newDocBlocks = [...docBlocks];
+    newDocBlocks.push({
+      isTextBlock: false,
+      id: newDocBlocks.length,
+      initialContents: contents,
+    });
     docBlocksContents.push('');
     setDocBlocks(newDocBlocks);
-  }
+  };
 
-  function updateContents(idx, contents, isTextBlock) {
-    docBlocksContents[idx] =
-    {
-      isTextBlock: isTextBlock,
-      contents: contents
-    };
-  }
+  const updateContents = (idx, contents, isTextBlock) => {
+    docBlocksContents[idx] = { isTextBlock, contents };
+  };
 
-  function printContents() {
-    let allContents = {};
-    for (let i in docBlocksContents) {
-      allContents[i] = docBlocksContents[i];
-    }
+  const printContents = () => {
+    const allContents = {};
+    docBlocksContents.forEach((content, index) => {
+      allContents[index] = content;
+    });
     console.log(allContents);
-  }
+  };
 
-  function importContents(documentRawText) {
-    let allContents = JSON.parse(documentRawText);
+  const importContents = (documentRawText) => {
+    const allContents = JSON.parse(documentRawText);
     for (const [key, value] of Object.entries(allContents)) {
       if (value.isTextBlock) {
         addTextBlock(value.contents);
@@ -235,18 +238,35 @@ function Editor() {
         addGraphBlock(value.contents);
       }
     }
-  }
+  };
 
   return (
     <>
-      <Navbar handleAddTextBlock={() => { addTextBlock(''); }} handleAddGraphBlock={() => { addGraphBlock(''); }} handlePrintButtonClick={printContents} pushToDB={pushToDB} pullFromDB={pullFromDB}/>
-      {
-        docBlocks.map((docBlock) =>
-          docBlock.isTextBlock ?
-            <TextBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate={updateContents} />
-            : <GraphBlock id={docBlock.id} initialContents={docBlock.initialContents} hookContentsUpdate={updateContents} />
+      <Navbar
+        handleAddTextBlock={() => addTextBlock('')}
+        handleAddGraphBlock={() => addGraphBlock('')}
+        handlePrintButtonClick={printContents}
+        pushToDB={pushToDB}
+        pullFromDB={pullFromDB}
+      />
+      {docBlocks.map((docBlock) =>
+        docBlock.isTextBlock ? (
+          <TextBlock
+            key={docBlock.id}
+            id={docBlock.id}
+            initialContents={docBlock.initialContents}
+            hookContentsUpdate={updateContents}
+            removeBlock={removeBlock} // 삭제 함수 전달
+          />
+        ) : (
+          <GraphBlock
+            key={docBlock.id}
+            id={docBlock.id}
+            initialContents={docBlock.initialContents}
+            hookContentsUpdate={updateContents}
+          />
         )
-      }
+      )}
     </>
   );
 }
