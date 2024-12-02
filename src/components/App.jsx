@@ -102,7 +102,7 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
   }, [isEditible, contents]);
 
   return (
-    <div className="doc-block">
+    <div className="doc-block" id={id}>
       {/* 삭제 버튼 */}
       <button
         className="btn content-box-button delete"
@@ -126,7 +126,6 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
           ref={textareaRef}
           type="text"
           className="content-box"
-          id={id}
           value={contents}
           onChange={handleContentsUpdate}
         />
@@ -140,8 +139,6 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
 function GraphBlock({ id, initialContents, hookContentsUpdate }) {
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const [contents, setContents] = useState(initialContents); // JSON 콘텐츠
-
-
 
   function updateInitialContents() {
     if ((initialContents && initialContents !== '')) {
@@ -189,7 +186,7 @@ function Editor() {
     importContents(rawText);
   };
 
-  const addTextBlock = (contents) => {
+  function addTextBlock(contents) {
     const newDocBlocks = [...docBlocks];
     newDocBlocks.push({
       isTextBlock: true,
@@ -200,13 +197,13 @@ function Editor() {
     setDocBlocks(newDocBlocks);
   };
 
-  const removeBlock = (id) => {
+  function removeBlock(id) {
     const updatedDocBlocks = docBlocks.filter((block) => block.id !== id);
     setDocBlocks(updatedDocBlocks);
     docBlocksContents.splice(id, 1); // 콘텐츠 목록에서 해당 블록 삭제
   };
 
-  const addGraphBlock = (contents) => {
+  function addGraphBlock(contents) {
     const newDocBlocks = [...docBlocks];
     newDocBlocks.push({
       isTextBlock: false,
@@ -229,8 +226,12 @@ function Editor() {
     console.log(allContents);
   };
 
-  const importContents = (documentRawText) => {
-    const allContents = JSON.parse(documentRawText);
+  function printContents() {
+    let allContents = {};
+    for (let i in docBlocksContents) {
+      allContents[i] = docBlocksContents[i];
+    }
+  }
     for (const [key, value] of Object.entries(allContents)) {
       if (value.isTextBlock) {
         addTextBlock(value.contents);
