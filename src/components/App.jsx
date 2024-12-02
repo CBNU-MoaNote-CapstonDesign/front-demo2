@@ -232,14 +232,33 @@ function Editor() {
       allContents[i] = docBlocksContents[i];
     }
   }
+
+  function importContents(documentRawText) {
+    let newDocBlocks = [];
+    docBlocksContents = {};
+    let allContents = JSON.parse(documentRawText);
     for (const [key, value] of Object.entries(allContents)) {
       if (value.isTextBlock) {
-        addTextBlock(value.contents);
+        newDocBlocks.push(
+          {
+            isTextBlock: true,
+            id: key,
+            initialContents: value.contents,
+          }
+        );
+        docBlocksContents.push(value.contents);
       } else {
-        addGraphBlock(value.contents);
+        newDocBlocks.push(
+          {
+            isTextBlock: false,
+            id: key,
+            initialContents: value.contents,
+          }
+        );
+        docBlocksContents.push(value.contents);
       }
     }
-  };
+  }
 
   return (
     <>
