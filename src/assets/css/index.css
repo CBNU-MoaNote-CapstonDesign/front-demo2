@@ -28,6 +28,7 @@ body {
   left: 0;
   right: 0;
   height: 80px;
+  z-index: 9999;
 }
 
 .navbar-brand {
@@ -85,6 +86,7 @@ body {
   padding: 8px 15px;
   border-radius: 5px;
   cursor: pointer;
+  margin-bottom: 5px;
   transition: background-color 0.3s ease;
 }
 
