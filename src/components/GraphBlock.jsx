@@ -22,15 +22,15 @@ function GraphBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
     return (
         <>
             <div className="doc-block" id={id}>
-                {/* 삭제 버튼 */}
-                <button
-                    className="btn content-box-button delete"
-                    onClick={() => removeBlock(id)}
-                >
-                    삭제
-                </button>
+                <div className="d-flex justify-content-between align-items-center pb-2">
+                    <button className="btn content-box-button delete" onClick={() => removeBlock(id) }>삭제</button>
+                    <div className="d-flex flex-row">
+                        <button className="btn btn-primary btn-sm square-btn me-1">▲</button>
+                        <button className="btn btn-primary btn-sm square-btn">▼</button>
+                    </div>
+                </div>
 
-                <div id={id} style={{ width: "100%", height: "100vh", margin: 0, padding: 0 }}>
+                <div className="graph-block" id={id}>
                     <Excalidraw
                         initialData={initialDataRef.current}
                         onChange={handleContentsUpdate}
