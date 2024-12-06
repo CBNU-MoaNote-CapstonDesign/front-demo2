@@ -14,6 +14,11 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
         }
     };
 
+    function focus() {
+        const textarea = textareaRef.current;
+        textarea.focus();
+    };
+
     function handleContentsUpdate(e) {
         setContents(e.target.value);
         hookContentsUpdate(id, e.target.value, true);
@@ -22,6 +27,7 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
     useEffect(() => {
         if (isEditible) {
             adjustHeight();
+            focus();
         }
     }, [isEditible, contents]);
 
@@ -35,14 +41,6 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
                 삭제
             </button>
 
-            {/* 편집 버튼 */}
-            <button
-                className="btn content-box-button editible"
-                onClick={() => setIsEditible(!isEditible)}
-            >
-                수정
-            </button>
-
             {/* 내용 */}
             {isEditible ? (
                 <textarea
@@ -52,9 +50,14 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
                     className="content-box"
                     value={contents}
                     onChange={handleContentsUpdate}
+                    onBlur={() => setIsEditible(!isEditible)}
                 />
             ) : (
-                <Markdown className="content-box">{contents}</Markdown>
+                <div style={{padding:0, margin:0, width:"100%"}}
+                        onClick={() => setIsEditible(!isEditible)}
+                >
+                    <Markdown className="content-box">{contents}</Markdown>
+                </div>
             )}
         </div>
     );
