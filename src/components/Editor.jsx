@@ -70,6 +70,27 @@ function Editor() {
         setDocBlocks(allContents);
     }
 
+    function insertGraphBlock(id, contents) {
+        setDocBlocks((prev) => {
+            const targetIndex = prev.findIndex((block) => block.id === id);
+
+            const updatedBlocks = [
+                ...prev.slice(0, targetIndex + 1),
+                {
+                    isTextBlock: false,
+                    id: prev.length,
+                    contents: contents,
+                },
+                ...prev.slice(targetIndex + 1),
+            ];
+
+            return updatedBlocks.map((block, index) => ({
+                ...block,
+                id: index,
+            }));
+        });
+    }
+
     return (
         <>
             <Navbar
@@ -87,6 +108,7 @@ function Editor() {
                         initialContents={docBlock.contents}
                         hookContentsUpdate={updateContents}
                         removeBlock={removeBlock}
+                        insertGraphBlock={insertGraphBlock}
                     />
                 ) : (
                     <GraphBlock

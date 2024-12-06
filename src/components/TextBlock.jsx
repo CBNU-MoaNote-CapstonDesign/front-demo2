@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Markdown from 'react-markdown'
 
-function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
+function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock, insertGraphBlock }) {
     const [contents, setContents] = useState(initialContents);
     const [isEditible, setIsEditible] = useState(true);
     const textareaRef = useRef(null);
