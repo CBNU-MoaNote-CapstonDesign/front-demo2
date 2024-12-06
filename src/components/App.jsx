@@ -217,20 +217,13 @@ function Editor() {
   const updateContents = (idx, contents, isTextBlock) => {
     docBlocksContents[idx] = { isTextBlock, contents };
   };
-
-  const printContents = () => {
+  
+  function printContents() {
     const allContents = {};
     docBlocksContents.forEach((content, index) => {
       allContents[index] = content;
     });
     console.log(allContents);
-  };
-
-  function printContents() {
-    let allContents = {};
-    for (let i in docBlocksContents) {
-      allContents[i] = docBlocksContents[i];
-    }
   }
 
   function importContents(documentRawText) {
