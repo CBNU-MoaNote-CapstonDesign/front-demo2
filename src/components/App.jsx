@@ -82,7 +82,7 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
   const [isEditible, setIsEditible] = useState(true);
   const textareaRef = useRef(null);
 
-  const adjustHeight = () => {
+  function adjustHeight () {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto";
@@ -90,7 +90,7 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
     }
   };
 
-  const handleContentsUpdate = (e) => {
+  function handleContentsUpdate (e) {
     setContents(e.target.value);
     hookContentsUpdate(id, e.target.value, true);
   };
@@ -137,29 +137,28 @@ function TextBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
 }
 
 function GraphBlock({ id, initialContents, hookContentsUpdate }) {
-  const [excalidrawAPI, setExcalidrawAPI] = useState(null);
-  const [contents, setContents] = useState(initialContents); // JSON 콘텐츠
+  const [contents, setContents] = useState(initialContents);
+  const initialDataRef = useRef(null);
 
-  function updateInitialContents() {
-    if ((initialContents && initialContents !== '')) {
-      return JSON.parse(initialContents);
-    } else {
-      return null;
-    }
+  if (initialDataRef.current === null) {
+    initialDataRef.current = (initialContents && initialContents !== '')
+      ? JSON.parse(initialContents)
+      : null;
   }
 
   function handleContentsUpdate(excalidrawElements, appState, files) {
     const documentRawText = serializeAsJSON(excalidrawElements, appState, files);
-    setContents(documentRawText);
-    hookContentsUpdate(id, documentRawText, false);
-  }
+    if (documentRawText !== contents) {
+      setContents(documentRawText);
+      hookContentsUpdate(id, documentRawText, false);
+    }
+  };
 
   return (
     <>
       <div id={id} style={{ width: "70vw", height: "100vh" }}>
         <Excalidraw
-          initialData={updateInitialContents()}
-          excalidrawAPI={(api) => setExcalidrawAPI(api)}
+          initialData={initialDataRef.current}
           onChange={handleContentsUpdate}
         />
       </div>
@@ -168,89 +167,62 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
 }
 
 function Editor() {
-  let [docBlocks, setDocBlocks] = useState([]);
+  const [docBlocks, setDocBlocks] = useState([]);
 
-  let docBlocksContents = [];
-
-  const pushToDB = () => {
-    const allContents = {};
-    docBlocksContents.forEach((content, index) => {
-      allContents[index] = content;
-    });
-    const rawText = JSON.stringify(allContents);
+  function pushToDB () {
+    // docBlocks 자체를 모두 저장
+    const rawText = JSON.stringify(docBlocks);
     localStorage.setItem("test", rawText);
   };
 
-  const pullFromDB = () => {
+  function pullFromDB () {
     const rawText = localStorage.getItem("test");
-    importContents(rawText);
+    if (rawText) {
+      importContents(rawText);
+    }
   };
 
   function addTextBlock(contents) {
-    const newDocBlocks = [...docBlocks];
-    newDocBlocks.push({
-      isTextBlock: true,
-      id: newDocBlocks.length,
-      initialContents: contents,
-    });
-    docBlocksContents.push('');
-    setDocBlocks(newDocBlocks);
+    setDocBlocks((prev) => [...prev,
+      {
+        isTextBlock: true,
+        id: prev.length,
+        contents: contents,
+      }
+    ]);
   };
 
   function removeBlock(id) {
-    const updatedDocBlocks = docBlocks.filter((block) => block.id !== id);
-    setDocBlocks(updatedDocBlocks);
-    docBlocksContents.splice(id, 1); // 콘텐츠 목록에서 해당 블록 삭제
+    setDocBlocks((prev) => prev.filter((block) => block.id !== id));
   };
 
   function addGraphBlock(contents) {
-    const newDocBlocks = [...docBlocks];
-    newDocBlocks.push({
-      isTextBlock: false,
-      id: newDocBlocks.length,
-      initialContents: contents,
-    });
-    docBlocksContents.push('');
-    setDocBlocks(newDocBlocks);
+    setDocBlocks((prev) => [
+      ...prev,
+      {
+        isTextBlock: false,
+        id: prev.length,
+        contents: contents,
+      }
+    ]);
   };
 
-  const updateContents = (idx, contents, isTextBlock) => {
-    docBlocksContents[idx] = { isTextBlock, contents };
+  function updateContents (idx, contents, isTextBlock) {
+    setDocBlocks((prev) => prev.map((block) => {
+      if (block.id === idx) {
+        return { ...block, contents: contents };
+      }
+      return block;
+    }));
   };
-  
-  function printContents() {
-    const allContents = {};
-    docBlocksContents.forEach((content, index) => {
-      allContents[index] = content;
-    });
-    console.log(allContents);
-  }
+
+  function printContents () {
+    console.log(docBlocks);
+  };
 
   function importContents(documentRawText) {
-    let newDocBlocks = [];
-    docBlocksContents = {};
-    let allContents = JSON.parse(documentRawText);
-    for (const [key, value] of Object.entries(allContents)) {
-      if (value.isTextBlock) {
-        newDocBlocks.push(
-          {
-            isTextBlock: true,
-            id: key,
-            initialContents: value.contents,
-          }
-        );
-        docBlocksContents.push(value.contents);
-      } else {
-        newDocBlocks.push(
-          {
-            isTextBlock: false,
-            id: key,
-            initialContents: value.contents,
-          }
-        );
-        docBlocksContents.push(value.contents);
-      }
-    }
+    const allContents = JSON.parse(documentRawText);
+    setDocBlocks(allContents);
   }
 
   return (
@@ -267,7 +239,7 @@ function Editor() {
           <TextBlock
             key={docBlock.id}
             id={docBlock.id}
-            initialContents={docBlock.initialContents}
+            initialContents={docBlock.contents}
             hookContentsUpdate={updateContents}
             removeBlock={removeBlock} // 삭제 함수 전달
           />
@@ -275,7 +247,7 @@ function Editor() {
           <GraphBlock
             key={docBlock.id}
             id={docBlock.id}
-            initialContents={docBlock.initialContents}
+            initialContents={docBlock.contents}
             hookContentsUpdate={updateContents}
           />
         )
