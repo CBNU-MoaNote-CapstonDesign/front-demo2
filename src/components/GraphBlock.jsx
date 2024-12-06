@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { Excalidraw, serializeAsJSON } from "@excalidraw/excalidraw"
 
-function GraphBlock({ id, initialContents, hookContentsUpdate }) {
+function GraphBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
     const [contents, setContents] = useState(initialContents);
     const initialDataRef = useRef(null);
 
@@ -21,11 +21,21 @@ function GraphBlock({ id, initialContents, hookContentsUpdate }) {
 
     return (
         <>
-            <div id={id} style={{ width: "70vw", height: "100vh" }}>
-                <Excalidraw
-                    initialData={initialDataRef.current}
-                    onChange={handleContentsUpdate}
-                />
+            <div className="doc-block" id={id}>
+                {/* 삭제 버튼 */}
+                <button
+                    className="btn content-box-button delete"
+                    onClick={() => removeBlock(id)}
+                >
+                    삭제
+                </button>
+
+                <div id={id} style={{ width: "70vw", height: "100vh" }}>
+                    <Excalidraw
+                        initialData={initialDataRef.current}
+                        onChange={handleContentsUpdate}
+                    />
+                </div>
             </div>
         </>
     )

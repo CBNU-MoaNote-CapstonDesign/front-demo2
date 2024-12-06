@@ -79,7 +79,7 @@ function Editor() {
                         id={docBlock.id}
                         initialContents={docBlock.contents}
                         hookContentsUpdate={updateContents}
-                        removeBlock={removeBlock} // 삭제 함수 전달
+                        removeBlock={removeBlock}
                     />
                 ) : (
                     <GraphBlock
@@ -87,6 +87,7 @@ function Editor() {
                         id={docBlock.id}
                         initialContents={docBlock.contents}
                         hookContentsUpdate={updateContents}
+                        removeBlock={removeBlock}
                     />
                 )
             )}
