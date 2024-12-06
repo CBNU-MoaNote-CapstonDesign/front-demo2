@@ -31,7 +31,14 @@ function Editor() {
     };
 
     function removeBlock(id) {
-        setDocBlocks((prev) => prev.filter((block) => block.id !== id));
+        setDocBlocks((prev) => {
+            const updatedBlocks = prev.filter((block) => block.id !== id);
+
+            return updatedBlocks.map((block, index) => ({
+                ...block,
+                id: index, 
+            }));
+        });
     };
 
     function addGraphBlock(contents) {
