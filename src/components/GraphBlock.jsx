@@ -30,7 +30,7 @@ function GraphBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
                     삭제
                 </button>
 
-                <div id={id} style={{ width: "70vw", height: "100vh" }}>
+                <div id={id} style={{ width: "100%", height: "100vh", margin: 0, padding: 0 }}>
                     <Excalidraw
                         initialData={initialDataRef.current}
                         onChange={handleContentsUpdate}
