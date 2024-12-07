@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "../assets/css/Navbar.css";
 import {
     getDocumentNames,
@@ -13,6 +14,11 @@ function Navbar({ handleAddTextBlock, setFileURL, pushToDB, pullFromDB, handleAd
     const [menuOpen, setMenuOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [documentNames, setDocumentNames] = useState(getDocumentNames());
+    const [isExpanded, setIsExpanded] = useState(false);
+
+    const toggleExpand = () => {
+        setIsExpanded((prev) => !prev);
+    };
 
     function toggleMenu () {
         setMenuOpen(!menuOpen);
@@ -49,49 +55,6 @@ function Navbar({ handleAddTextBlock, setFileURL, pushToDB, pullFromDB, handleAd
                         MOANOTE
                     </a>
 
-                    {/* 오른쪽 버튼 */}
-                    <div className="d-flex">
-                        <button
-                            className="btn btn-light"
-                            style={{ backgroundColor: "#355395", color: "white" }}
-                            type="button"
-                            onClick={pushToDB}
-                        >
-                            DB에 저장
-                        </button>
-                        <button
-                            className="btn btn-light"
-                            style={{ backgroundColor: "#355395", color: "white" }}
-                            type="button"
-                            onClick={pullFromDB}
-                        >
-                            DB에서 불러오기
-                        </button>
-                        <button
-                            className="btn btn-light me-2"
-                            style={{ backgroundColor: "#355395", color: "white" }}
-                            type="button"
-                            onClick={handlePrintButtonClick}
-                        >
-                            전체 내용 출력
-                        </button>
-                        <button
-                            className="btn btn-light me-2"
-                            style={{ backgroundColor: "#355395", color: "white" }}
-                            type="button"
-                            onClick={handleAddTextBlock}
-                        >
-                            텍스트 블록 추가
-                        </button>
-                        <button
-                            className="btn btn-light"
-                            style={{ backgroundColor: "#355395", color: "white" }}
-                            type="button"
-                            onClick={handleAddGraphBlock}
-                        >
-                            그래프 블록 추가
-                        </button>
-                    </div>
                 </div>
             </nav>
             {/* 사이드 메뉴 */}
@@ -117,6 +80,35 @@ function Navbar({ handleAddTextBlock, setFileURL, pushToDB, pullFromDB, handleAd
                     />
                     <button className="menu-add-btn" onClick={handleAddClick}>
                         추가
+                    </button>
+                </div>
+            </div>
+
+            {/* 플로팅 버튼 */}
+            <div className="floating-container">
+                {/* 플로팅 버튼들 */}
+                <div className="floating-buttons">
+                    {/*
+                    <button className="floating-action" onClick={pushToDB}>
+                        <i className="bi bi-cloud-arrow-up"></i>
+                        <span>DB 저장</span>
+                    </button>
+                    <button className="floating-action" onClick={pullFromDB}>
+                        <i className="bi bi-cloud-arrow-down"></i>
+                        <span>DB 불러오기</span>
+                    </button>
+                    <button className="floating-action" onClick={handlePrintButtonClick}>
+                        <i className="bi bi-printer"></i>
+                        <span>출력</span>
+                    </button>
+                    */}
+                    <button className="floating-action" onClick={handleAddTextBlock}>
+                        <i className="bi bi-fonts"></i>
+                        <span>텍스트 블록</span>
+                    </button>
+                    <button className="floating-action" onClick={handleAddGraphBlock}>
+                        <i className="bi bi-pencil-square"></i>
+                        <span>그래프 블록</span>
                     </button>
                 </div>
             </div>
