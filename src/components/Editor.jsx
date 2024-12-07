@@ -1,20 +1,29 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Navbar from './Navbar'
 import TextBlock from './TextBlock'
 import GraphBlock from './GraphBlock'
 
+import {
+    getDocumentNames,
+    createDocument,
+    readDocumentContents,
+    updateDocumentContents,
+    deleteDocument,
+} from "./localStoragePrototype";
+
 function Editor() {
     const [docBlocks, setDocBlocks] = useState([]);
-
+    const [fileURL, setFileURL] = useState([]);
+    
     function pushToDB() {
         // docBlocks 자체를 모두 저장
         const rawText = JSON.stringify(docBlocks);
-        localStorage.setItem("test", rawText);
+        updateDocumentContents(fileURL,rawText);
     };
 
     function pullFromDB() {
-        const rawText = localStorage.getItem("test");
+        const rawText = readDocumentContents(fileURL);
         if (rawText) {
             importContents(rawText);
         }
@@ -88,12 +97,21 @@ function Editor() {
         });
     }
 
+    useEffect(() => {
+        pullFromDB();
+    }, [fileURL]);
+
+    useEffect(() => {
+        pushToDB();
+    }, [docBlocks]);
+
     return (
         <>
             <Navbar
                 handleAddTextBlock={() => addTextBlock('')}
                 handleAddGraphBlock={() => addGraphBlock('')}
                 handlePrintButtonClick={printContents}
+                setFileURL={setFileURL}
                 pushToDB={pushToDB}
                 pullFromDB={pullFromDB}
             />

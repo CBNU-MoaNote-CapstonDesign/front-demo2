@@ -9,7 +9,7 @@ import {
     deleteDocument,
 } from "./localStoragePrototype";
 
-function Navbar({ handleAddTextBlock, pushToDB, pullFromDB, handleAddGraphBlock, handlePrintButtonClick }) {
+function Navbar({ handleAddTextBlock, setFileURL, pushToDB, pullFromDB, handleAddGraphBlock, handlePrintButtonClick }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [documentNames, setDocumentNames] = useState(getDocumentNames());
@@ -25,9 +25,8 @@ function Navbar({ handleAddTextBlock, pushToDB, pullFromDB, handleAddGraphBlock,
     };
 
     function handleClick(documentName) {
-        window.alert(documentName);
+        setFileURL(documentName);
     }
-
     
     return (
         <>
