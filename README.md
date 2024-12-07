@@ -110,7 +110,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 
 ### 자동생성 API 연결
-자동생성은 로컬 환경의 프록시 서버가 api 호출을 중계합니다. 프록시 서버는 3002 포트에서 열립니다. 아래에는 python flask로 구현된 간단한 프록시 서버입니다. 프록시 서버에는 api 키가 필요하며, openai project에 가입한 후 발급받을 수 있습니다. 또한, openai project billing에서 크레딧을 결제해야 api 이용이 가능합니다.
+자동생성은 로컬 환경의 프록시 서버가 api 호출을 중계합니다. 프록시 서버는 3002 포트에서 열립니다. 아래에는 python flask로 구현된 간단한 프록시 서버의 코드가 있습니다. 프록시 서버에는 api 키가 필요하며, openai project에 가입한 후 발급받을 수 있습니다. 또한, openai project billing에서 크레딧을 결제해야 openai의 api 이용이 가능합니다.
 
 
 ## 파이썬 플라스크 설치
@@ -121,6 +121,7 @@ pip install
 
 
 ## openai gpt api 프록시 서버
+`proxy.py`
 ```python
 # OpenAI API 키
 OPENAI_API_KEY = "여기에 키 입력"
@@ -139,48 +140,45 @@ OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 @app.route('/proxy', methods=['POST'])
 def proxy():
     try:
-        print("입력받음")
-        # 클라이언트로부터 JSON 데이터 가져오기
+        print("중계 요청 처리중...")
         data = request.get_json()
 
-        # OpenAI API로 전달할 데이터 구성
         payload = {
             "model": data.get("model", "gpt-4"),  # 기본값은 gpt-4
-            "messages": data["messages"],        # 클라이언트에서 전달받은 메시지
+            "messages": data["messages"],        
             "temperature": data.get("temperature", 0.7),  # 기본값은 0.7
         }
 
-        # 요청 헤더 구성
         headers = {
             "Authorization": f"Bearer {OPENAI_API_KEY}",
             "Content-Type": "application/json",
         }
 
-        # OpenAI API로 요청 보내기
         response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
 
-        # 응답 상태 코드 확인 및 데이터 반환
         if response.status_code == 200:
-            # 성공적으로 받은 응답
             response_data = response.json()
-            print("Prompt 처리 완료:", response_data)  # Python 콘솔에 출력
+            print("Prompt 처리 완료:", response_data)
             return jsonify(response_data)
         else:
-            # OpenAI API에서 에러 반환 시
             error_message = {
                 "error": f"OpenAI API Error: {response.status_code}",
                 "details": response.text,
             }
-            print("OpenAI API 에러:", error_message)  # Python 콘솔에 출력
+            print("OpenAI API 에러:", error_message)
             return jsonify(error_message), response.status_code
 
     except Exception as e:
-        # 서버 내부 에러 처리
         error_message = {"error": "Server Error", "details": str(e)}
-        print("서버 에러:", error_message)  # Python 콘솔에 출력
+        print("서버 에러:", error_message)
         return jsonify(error_message), 500
 
 if __name__ == '__main__':
     app.run(port=3002, debug=True)
 
+```
+
+## 프록시 서버 실행
+```bash
+python proxy.py
 ```
