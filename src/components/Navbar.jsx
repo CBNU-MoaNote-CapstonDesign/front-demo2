@@ -14,25 +14,33 @@ function Navbar({ handleAddTextBlock, setFileURL, pushToDB, pullFromDB, handleAd
     const [menuOpen, setMenuOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [documentNames, setDocumentNames] = useState(getDocumentNames());
-    const [isExpanded, setIsExpanded] = useState(false);
-
-    const toggleExpand = () => {
-        setIsExpanded((prev) => !prev);
-    };
+    const [currentDocumentName, setCurrentDocumentName] = useState('');
 
     function toggleMenu () {
         setMenuOpen(!menuOpen);
     };
 
     function handleAddClick () {
+        const documentName = inputValue
         createDocument(inputValue);
         setDocumentNames(getDocumentNames());
+        handleClick(documentName);
         setInputValue("");
     };
 
     function handleClick(documentName) {
+        setCurrentDocumentName(documentName);
         setFileURL(documentName);
-    }
+    };
+
+    function handleDeleteClick(documentName) {
+        if (currentDocumentName === documentName) {
+            setCurrentDocumentName('');
+            setFileURL('');
+        }
+        deleteDocument(documentName);
+        setDocumentNames(getDocumentNames());
+    };
     
     return (
         <>
@@ -50,21 +58,39 @@ function Navbar({ handleAddTextBlock, setFileURL, pushToDB, pullFromDB, handleAd
                         ☰
                     </button>
 
-                    {/* 왼쪽 로고 및 텍스트 */}
-                    <a className="navbar-brand text-white" href="#" style={{ fontWeight: "bold", textAlign: "center" }}>
-                        MOANOTE
+                    {/* 문서이름  */}
+                    <a className="navbar-brand text-white ps-3" href="#" style={{ fontWeight: "bold", textAlign: "left" }}>
+                        { currentDocumentName }
                     </a>
 
+                    {/* 로고  */}
+                    <div
+                        className="d-flex ps-3 pe-3"
+                        href="#"
+                        style={{
+                            margin: 0,
+                            fontWeight: "bold",
+                            textAlign: "right",
+                            backgroundColor: "rgba(0, 0, 0, 0.5",
+                            color: "white",
+                            padding: "5px 10px",
+                            borderRadius: "5px",
+                            fontSize: "25px",
+                        }}
+                    >
+                        MOANOTE
+                    </div>
                 </div>
             </nav>
             {/* 사이드 메뉴 */}
             <div className={`side-menu ${menuOpen ? "open" : ""}`}>
                 <div className="menu-content">
-                    <ul>
-                        <h4>문서 목록</h4>
+                    <h4 className="ms-3">문서 목록</h4>
+                    <ul className="ms-3 ps-3 pe-2">
                         {documentNames.map((item, index) => (
-                            <li>
-                                <button className="filelink"onClick={() => handleClick(item)}> {item} </button>
+                            <li className="d-flex justify-content-between align-items-center">
+                                <button className="filelink text-start" onClick={() => handleClick(item)}> {item} </button>
+                                <button className="small-btn rounded-circle ms-auto" onClick={()=> handleDeleteClick(item)} style={{ width: "16px", height: "16px", "font-size": "12px", padding: "0" }}>x</button>
                             </li>
                         ))}
                     </ul>

@@ -1,6 +1,6 @@
 /* Navbar */
 .navbar {
-    background: linear-gradient(65deg, #9b2c5d, #fe6b8b);
+    background: linear-gradient(40deg, #9b2c5d, #fe6b8b);
     color: white;
     width: 100%;
     position: fixed;
@@ -79,7 +79,7 @@
 }
 
 .menu-content {
-    padding: 20px;
+    padding: 20px 0;
     font-size: 18px;
     font-weight: bold;
     color: #333;
@@ -94,6 +94,31 @@
     margin: 10px 0;
     font-size: 16px;
     color: #555;
+}
+
+.small-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0;
+}
+
+.small-btn:hover {
+    background-color: #d6d6d6;
+    transform: scale(1.1);
+}
+
+.small-btn:active {
+    background-color: #cccccc;
+    transform: scale(0.95);
 }
 
 /* Footer (입력창과 추가 버튼) */
