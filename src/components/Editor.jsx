@@ -31,14 +31,11 @@ function Editor() {
     };
 
     function removeBlock(id) {
-        setDocBlocks((prev) => {
-            const updatedBlocks = prev.filter((block) => block.id !== id);
-
-            return updatedBlocks.map((block, index) => ({
-                ...block,
-                id: index, 
-            }));
-        });
+        const updatedBlocks = docBlocks.filter((block) => block.id !== id);
+        for (let idx in updatedBlocks) {
+            updatedBlocks[idx].id = idx;
+        }
+        setDocBlocks(updatedBlocks);
     };
 
     function addGraphBlock(contents) {
