@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/css/Navbar.css";
+import {
+    getDocumentNames,
+    createDocument,
+    readDocumentContents,
+    updateDocumentContents,
+    deleteDocument,
+} from "./localStoragePrototype";
 
 function Navbar({ handleAddTextBlock, pushToDB, pullFromDB, handleAddGraphBlock, handlePrintButtonClick }) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [inputValue, setInputValue] = useState("");
+    const [documentNames, setDocumentNames] = useState(getDocumentNames());
 
     function toggleMenu () {
         setMenuOpen(!menuOpen);
     };
 
-    const handleAddClick = () => {
-        console.log("추가 버튼 클릭됨:", inputValue);
+    function handleAddClick () {
+        createDocument(inputValue);
+        setDocumentNames(getDocumentNames());
         setInputValue("");
     };
+
+    function handleClick(documentName) {
+        window.alert(documentName);
+    }
 
     
     return (
@@ -85,11 +98,13 @@ function Navbar({ handleAddTextBlock, pushToDB, pullFromDB, handleAddGraphBlock,
             {/* 사이드 메뉴 */}
             <div className={`side-menu ${menuOpen ? "open" : ""}`}>
                 <div className="menu-content">
-                    <h3>디렉토리</h3>
                     <ul>
-                        <li>폴더 1</li>
-                        <li>폴더 2</li>
-                        <li>폴더 3</li>
+                        <h4>문서 목록</h4>
+                        {documentNames.map((item, index) => (
+                            <li>
+                                <button className="filelink"onClick={() => handleClick(item)}> {item} </button>
+                            </li>
+                        ))}
                     </ul>
                 </div>
 

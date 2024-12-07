@@ -136,3 +136,10 @@
     background-color: #bbb;
     transform: translateY(-1px);
 }
+
+.filelink {
+    all: unset;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
