@@ -22,7 +22,7 @@ function GraphBlock({ id, initialContents, hookContentsUpdate, removeBlock }) {
     return (
         <>
             <div className="doc-block" id={id}>
-                <div className="d-flex justify-content-between align-items-center pb-2">
+                <div className="d-flex justify-content-between align-items-center pb-1">
                     <button className="btn content-box-button delete" onClick={() => removeBlock(id) }>삭제</button>
                     <div className="d-flex flex-row">
                         <button className="btn btn-primary btn-sm square-btn me-1">▲</button>

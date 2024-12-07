@@ -115,26 +115,28 @@ function Editor() {
                 pushToDB={pushToDB}
                 pullFromDB={pullFromDB}
             />
-            {docBlocks.map((docBlock) =>
-                docBlock.isTextBlock ? (
-                    <TextBlock
-                        key={docBlock.id}
-                        id={docBlock.id}
-                        initialContents={docBlock.contents}
-                        hookContentsUpdate={updateContents}
-                        removeBlock={removeBlock}
-                        insertGraphBlock={insertGraphBlock}
-                    />
-                ) : (
-                    <GraphBlock
-                        key={docBlock.id}
-                        id={docBlock.id}
-                        initialContents={docBlock.contents}
-                        hookContentsUpdate={updateContents}
-                        removeBlock={removeBlock}
-                    />
-                )
-            )}
+            <div className="doc-blocks">
+                {docBlocks.map((docBlock) =>
+                    docBlock.isTextBlock ? (
+                        <TextBlock
+                            key={docBlock.id}
+                            id={docBlock.id}
+                            initialContents={docBlock.contents}
+                            hookContentsUpdate={updateContents}
+                            removeBlock={removeBlock}
+                            insertGraphBlock={insertGraphBlock}
+                        />
+                    ) : (
+                        <GraphBlock
+                            key={docBlock.id}
+                            id={docBlock.id}
+                            initialContents={docBlock.contents}
+                            hookContentsUpdate={updateContents}
+                            removeBlock={removeBlock}
+                        />
+                    )
+                )}
+            </div>
         </>
     );
 }
